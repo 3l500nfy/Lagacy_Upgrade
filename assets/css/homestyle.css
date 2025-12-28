@@ -1,0 +1,78 @@
+/* 
+    Document   : homestyle
+    Created on : Jul 9, 2013, 4:39:53 PM
+    Author     : Enesi
+    Description:
+        Styling of admin.php page
+*/
+
+
+#container { 
+
+    padding:20px;
+
+    border-width: 1px;
+    border-color:  #2563eb;
+    border-radius:4px;
+    -o-border-radius:4px;
+    -ms-border-radius:4px;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    min-width: 300px;
+    max-width: 800px;
+    margin-top:50px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.module:hover
+{
+    background-color:  #bfdbfe;
+    text-shadow: -4px 4px 3px #999999;
+    -o-text-shadow: -4px 4px 3px #999999;
+    -ms-text-shadow: -4px 4px 3px #999999;
+    -webkit-text-shadow: -4px 4px 3px #999999;
+    -moz-text-shadow: -4px 4px 3px #999999;
+    box-shadow:0.4px 0.8px 8px -1px #000000;
+    -o-box-shadow:0.4px 0.8px 8px -1px #000000;
+    -ms-box-shadow:0.4px 0.8px 8px -1px #000000;
+    -webkit-box-shadow:0.4px 0.8px 8px -1px #000000;
+    -moz-box-shadow:0.4px 0.8px 8px -1px #000000;
+
+}
+
+.module
+{
+    background-color: #eff6ff;
+    padding:5px;
+    border-style: solid;
+    border-width: 1px;
+    border-color:  #2563eb;
+    border-radius:12px;
+    -o-border-radius:12px;
+    -ms-border-radius:8px;
+    -webkit-border-radius:12px;
+    -moz-border-radius:8px;
+    max-width: 250px;
+    height: 100px;
+    display: inline-table;
+    padding-top: 40px;
+    cursor:pointer;
+    color:#0f766e;
+    font-family: "bariollight","Helvetica neue",helvetica,sans-serif;
+    font-size: 20px;
+    line-height: 21px;
+    box-sizing:border-box;
+    -o-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+    -ms-box-sizing:border-box;
+    box-shadow:0.4px 0.8px 6px -1px #000000;
+    -o-box-shadow:0.4px 0.8px 6px -1px #000000;
+    -ms-box-shadow:0.4px 0.8px 6px -1px #000000;
+    -webkit-box-shadow:0.4px 0.8px 6px -1px #000000;
+    -moz-box-shadow:0.4px 0.8px 6px -1px #000000;
+    margin-left: 15px;
+
+}
+

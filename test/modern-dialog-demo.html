@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Dialog Demo - CBT System</title>
+    <link href="css/modern-dialog.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .demo-container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+        
+        .demo-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .demo-btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        .demo-btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .demo-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .demo-btn-success {
+            background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+            color: white;
+        }
+        
+        .demo-btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(81, 207, 102, 0.4);
+        }
+        
+        .demo-btn-warning {
+            background: linear-gradient(135deg, #ffd93d 0%, #ff6b6b 100%);
+            color: white;
+        }
+        
+        .demo-btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .demo-btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+        
+        .demo-btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .demo-btn-secondary {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #dee2e6;
+        }
+        
+        .demo-btn-secondary:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>Modern Dialog System Demo</h1>
+        <p>Click the buttons below to see the modern dialog system in action. This replaces the old jQuery UI dialogs with a beautiful, responsive design.</p>
+        
+        <div class="demo-buttons">
+            <button class="demo-btn demo-btn-primary" onclick="showConfirmDialog()">
+                Confirm Dialog
+            </button>
+            
+            <button class="demo-btn demo-btn-success" onclick="showSuccessDialog()">
+                Success Dialog
+            </button>
+            
+            <button class="demo-btn demo-btn-warning" onclick="showWarningDialog()">
+                Warning Dialog
+            </button>
+            
+            <button class="demo-btn demo-btn-danger" onclick="showDangerDialog()">
+                Danger Dialog
+            </button>
+            
+            <button class="demo-btn demo-btn-secondary" onclick="showInfoDialog()">
+                Info Dialog
+            </button>
+            
+            <button class="demo-btn demo-btn-primary" onclick="showSubmitDialog()">
+                Submit Exam Dialog
+            </button>
+        </div>
+    </div>
+
+    <script src="js/modern-dialog.js"></script>
+    <script>
+        function showConfirmDialog() {
+            showModernDialog.confirm(
+                "Are you sure you want to submit your work?",
+                function() {
+                    console.log("User confirmed");
+                    showModernDialog.success("Work submitted successfully!");
+                },
+                function() {
+                    console.log("User cancelled");
+                }
+            );
+        }
+        
+        function showSuccessDialog() {
+            showModernDialog.success("Your exam has been completed successfully!");
+        }
+        
+        function showWarningDialog() {
+            const dialog = new ModernDialog({
+                title: 'Computer Based Exams',
+                message: 'Your time is running out! Please submit your work soon.',
+                type: 'warning',
+                buttons: [
+                    {
+                        text: 'Submit Now',
+                        type: 'danger',
+                        onClick: function() {
+                            console.log("User chose to submit now");
+                        }
+                    },
+                    {
+                        text: 'Continue',
+                        type: 'secondary',
+                        onClick: function() {
+                            console.log("User chose to continue");
+                        }
+                    }
+                ]
+            });
+            dialog.show();
+        }
+        
+        function showDangerDialog() {
+            const dialog = new ModernDialog({
+                title: 'Computer Based Exams',
+                message: 'Your time is over! Please logout immediately.',
+                type: 'warning',
+                buttons: [
+                    {
+                        text: 'Logout',
+                        type: 'danger',
+                        onClick: function() {
+                            console.log("User logged out");
+                        }
+                    }
+                ]
+            });
+            dialog.show();
+        }
+        
+        function showInfoDialog() {
+            showModernDialog.alert("This is an informational message about the exam system.");
+        }
+        
+        function showSubmitDialog() {
+            const dialog = new ModernDialog({
+                title: 'Computer Based Exams',
+                message: 'You have successfully completed the exams! Would you like to review your work or submit?',
+                type: 'success',
+                buttons: [
+                    {
+                        text: 'Submit',
+                        type: 'primary',
+                        onClick: function() {
+                            console.log("User submitted exam");
+                            showModernDialog.success("Exam submitted successfully!");
+                        }
+                    },
+                    {
+                        text: 'Review',
+                        type: 'secondary',
+                        onClick: function() {
+                            console.log("User chose to review");
+                        }
+                    }
+                ]
+            });
+            dialog.show();
+        }
+    </script>
+</body>
+</html>

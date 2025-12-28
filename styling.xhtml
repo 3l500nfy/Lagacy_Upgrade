@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>SBRS Style Template</title>
+        <style type="text/css">
+            body{
+                background-color: #cbd3e0;
+            }
+            .style-frm
+            {
+                padding:0px;
+                margin:0px;
+
+				
+				
+            }
+            .style-frm input, .style-frm select, .style-frm textarea, .style-frm fieldset, .style-frm legend, .style-frm button
+            {
+                padding:0px;
+                margin:0px;
+                border-width:0px;
+                border-style:none;
+                font-family: "Segoe UI",Helvetica,Arial,sans-serif;
+                font-size:14px;
+                line-height: 20px;
+                outline-style: none;
+            }
+
+            .style-frm input:focus, .style-frm select:focus, .style-frm textarea:focus, .style-frm button:focus
+            {
+                box-shadow:0px 0px 10px 0.2px #66b240;
+                -o-box-shadow:0px 0px 10px 0.2px #66b240;
+                -ms-box-shadow:0px 0px 10px 0.2px #66b240;
+                -webkit-box-shadow:0px 0px 10px 0.2px #66b240;
+                -moz-box-shadow:0px 0px 10px 0.2px #66b240;
+                outline-style: none;
+
+            }
+
+            .style-frm input
+            {
+                padding:3px;
+                margin:3px;
+                border-style:solid;
+                border-width: 1px;
+                border-color:  #66b240;
+                height: 20px;
+                border-radius:4px;
+                -o-border-radius:4px;
+                -ms-border-radius:4px;
+                -moz-border-radius:4px;
+                -webkit-border-radius:4px;
+
+            }
+
+            .style-frm input[type=radio], .style-frm input[type=checkbox]
+            {
+                height: auto;
+                line-height: normal;
+            }
+
+            .style-frm input[type=submit], .style-frm input[type=reset]
+            {
+                cursor:pointer;
+                height: auto;
+                line-height: normal;
+                background-color: #bbe8a4;
+                color: #2b681d;
+                font-weight:  500;
+            }
+
+            .style-frm input[type=submit]:hover, .style-frm input[type=reset]:hover
+            {
+                background-color: #8dc96e;
+                color: #2b681d;
+                font-weight:  500;
+            }
+
+            .style-frm select
+            {
+                padding:3px;
+                margin:3px;
+                border-style:solid;
+                border-width: 1px;
+                border-color:  #66b240;
+                min-height: 30px;
+                border-radius:4px;
+                -o-border-radius:4px;
+                -ms-border-radius:4px;
+                -moz-border-radius:4px;
+                -webkit-border-radius:4px;
+            }
+
+            .style-frm textarea
+            {
+                padding:3px;
+                margin:3px;
+                border-style:solid;
+                border-width: 1px;
+                border-color:  #66b240;
+                border-radius:4px;
+                -o-border-radius:4px;
+                -ms-border-radius:4px;
+                -moz-border-radius:4px;
+                -webkit-border-radius:4px;
+            }
+
+            .style-frm legend
+            {
+                padding:3px;
+                margin:3px;
+                border-style:solid;
+                border-width: 1px;
+                border-color:  #66b240;
+                height: 20px;
+                border-radius:4px;
+                -o-border-radius:4px;
+                -ms-border-radius:4px;
+                -moz-border-radius:4px;
+                -webkit-border-radius:4px;
+            }
+
+            .style-frm fieldset
+            {
+                padding:3px;
+                margin:3px;
+                border-style:solid;
+                border-width: 1px;
+                border-color:  #66b240;
+                border-radius:4px;
+                -o-border-radius:4px;
+                -ms-border-radius:4px;
+                -moz-border-radius:4px;
+                -webkit-border-radius:4px;
+            }
+
+            .alert-error
+            {
+                padding:0px;
+                margin:0px;
+                padding:3px;
+                margin:3px;
+                line-height: 20px;
+                vertical-align: middle;
+                background-color:rgb(242, 222, 222); 
+                color:rgb(185, 74, 72);
+                border-color:rgb(238, 211, 215);
+                border-width:1px;
+                border-style:solid;
+                border-radius:4px;
+                -o-border-radius:4px;
+                -ms-border-radius:4px;
+                -moz-border-radius:4px;
+                -webkit-border-radius:4px;
+                font-family: "Segoe UI",Helvetica,Arial,sans-serif;
+                font-size: 14px;
+
+            }
+
+            .alert-success
+            {
+                padding:0px;
+                margin:0px;
+                padding:3px;
+                margin:3px;
+                line-height: 20px;
+                vertical-align: middle;
+                background-color:lightgreen; 
+                color:darkgreen;
+                border-color:green;
+                border-width:1px;
+                border-style:solid;
+                border-radius:4px;
+                -o-border-radius:4px;
+                -ms-border-radius:4px;
+                -moz-border-radius:4px;
+                -webkit-border-radius:4px;
+                font-family: "Segoe UI",Helvetica,Arial,sans-serif;
+                font-size: 14px;
+
+            }
+
+            .alert-notice
+            {
+                padding:0px;
+                margin:0px;
+                padding:3px;
+                margin:3px;
+                line-height: 20px;
+                vertical-align: middle;
+                background-color: #e4e8fb; 
+                color:darkblue;
+                border-color:darkblue;
+                border-width:1px;
+                border-style:solid;
+                border-radius:4px;
+                -o-border-radius:4px;
+                -ms-border-radius:4px;
+                -moz-border-radius:4px;
+                -webkit-border-radius:4px;
+                font-family: "Segoe UI",Helvetica,Arial,sans-serif;
+                font-size: 14px;
+
+            }
+
+            .style-tbl
+            {
+                border-width: 1px;
+                border-color:#66b240;
+                border-style: solid;
+                margin:0px;
+                padding:0px;
+                border-collapse: collapse;
+                border-spacing: 0px;
+                font-family: "Segoe UI",Helvetica,Arial,sans-serif;
+                font-size: 14px;
+                line-height: 20px;
+                vertical-align: middle;
+            }
+
+            .style-tbl tr:hover
+            {
+                background-color: #d0fcba;
+            }
+
+            .style-tbl-striped tr:nth-child(odd)
+            {
+                background-color: #d7f9c6;
+            }
+
+            .style-tbl-striped tr:nth-child(odd):hover
+            {
+                background-color: #d0fcba;
+            }
+
+            .style-tbl tr
+            {
+                border-width: 1px;
+                border-color:#66b240;
+                border-style: solid;
+                margin:0px;
+                padding:0px;
+                border-collapse: collapse;
+                border-spacing: 0px;
+                font-family: "Segoe UI",Helvetica,Arial,sans-serif;
+                font-size: 14px;
+                line-height: 20px;
+                vertical-align: middle;
+            }
+
+            .style-tbl th
+            {
+                border-width: 1px;
+                border-color:#66b240;
+                border-style: solid;
+                margin:0px;
+                padding:0px;
+                border-collapse: collapse;
+                border-spacing: 0px;
+                font-family: "Segoe UI",Helvetica,Arial,sans-serif;
+                font-size: 14px;
+                line-height: 20px;
+                vertical-align: middle;
+                text-align: center;
+                font-weight: bold;
+                background-color:  #bbe8a4;
+                color:  #2b681d;
+            }
+
+            .style-tbl td
+            {
+                border-width: 1px;
+                border-color:#66b240;
+                border-style: solid;
+                margin:0px;
+                padding:0px;
+                border-collapse: collapse;
+                border-spacing: 0px;
+                font-family: "Segoe UI",Helvetica,Arial,sans-serif;
+                font-size: 14px;
+                line-height: 20px;
+                vertical-align: middle;
+                padding:3px;
+
+            }
+
+
+        </style>
+    </head>
+    <body>
+
+        <form class="style-frm">
+            Text field: <input type="text" placeholder="Text Field"/> <br />
+            Password field: <input type="password" placeholder="******"/> <br />
+            <input type="checkbox" /> Check Box<br />
+            <input type="radio"/> Radio Button<br />
+            <input type="submit" /><br />
+            Select Field: <select>
+                <option value="1">Umar enesi ibrahim</option>
+                <option value="2">2</option>
+            </select><br />
+            <textarea placeholder="Textarea">
+
+            </textarea><br />
+            <fieldset><legend>Legend</legend>
+                This is a field set
+            </fieldset>
+        </form>
+        <div class="alert-error">
+            this is error alert
+        </div>
+
+        <div class="alert-success">
+            this is success alert
+        </div>
+
+        <div class="alert-notice">
+            this is notice alert
+        </div>
+
+        <table class="style-tbl style-tbl-striped">
+            <tr>
+                <th>Field1</th><th>Field2</th><th>Field3</th><th>Field4</th>
+            </tr>
+            <tr>
+                <td>content1</td><td>content2</td><td>content3</td><td>content4</td>
+            </tr>
+            <tr>
+                <td>content1</td><td>content2</td><td>content3</td><td>content4</td>
+            </tr>
+            <tr>
+                <td>content1</td><td>content2</td><td>content3</td><td>content4</td>
+            </tr>
+            <tr>
+                <td>content1</td><td>content2</td><td>content3</td><td>content4</td>
+            </tr>
+        </table>
+    </body>
+</html>

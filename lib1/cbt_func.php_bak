@@ -1,0 +1,1230 @@
+<?php
+
+if (!isset($_SESSION))
+    session_start();
+
+// $_SESSION['MEMBER_FULLNAME'] => The fullname of the loggedin user
+// $_SESSION['MEMBER_USERID'] => The userid of the loggedin user
+// $_SESSION['MEMBER_USERNAME'] => The username of the loggedin user
+// $_SESSION['MEMBER_ROLES'] => The roles of the loggedin user
+// $_SESSION['MEMBER_PERMISSIONS'] => The permissions of the loggedin user
+// $_SESSION['MEMBER_EMAIL'] => The email address of the user.
+// $_SESSION['MEMBER_IDENTITY'] => The identification number (e.g P.Number) of the user
+
+require_once 'globals.php';
+require_once 'security.php';
+
+//returns an array containing testid initiated by a user
+function get_super_admin_test_as_array($limit = 100) {
+    $tests = array();
+    $limit = intval(clean($limit));
+    $uid = $_SESSION['MEMBER_USERID'];
+
+    $sql = "select testid from tbltestconfig where initiatedby <> '$uid' order by dateinitiated desc limit $limit";
+    $query = mysql_query($sql) or die("Error in function get_super_admin_test_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $tests[] = $row['testid'];
+    }
+    return $tests;
+}
+
+function get_test_initiated_as_array($limit = -1) {
+    $tests = array();
+    $limit = intval(clean($limit));
+    $uid = $_SESSION['MEMBER_USERID'];
+    if ($limit != -1 && $limit)
+        $sql = "select testid from tbltestconfig where initiatedby = '$uid' order by dateinitiated desc limit $limit";
+    else
+        $sql = "select testid from tbltestconfig where initiatedby= '$uid' order by dateinitiated desc limit 100";
+    $query = mysql_query($sql) or die("Error in function get_test_initiated_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $tests[] = $row['testid'];
+    }
+    return $tests;
+}
+
+// returns an array containing testid of which the user is a compositor
+function get_compositor_test_as_array($limit = -1) {
+    $tests = array();
+    $limit = intval(clean($limit));
+    $uid = $_SESSION['MEMBER_USERID'];
+    if ($limit != -1 && $limit)
+        $sql = "select distinct testid from tbltestcompositor where userid = '$uid' order by testid desc limit $limit";
+    else
+        $sql = "select distinct testid from tbltestcompositor where userid = '$uid' order by testid desc limit 100";
+    $query = mysql_query($sql) or die("Error in function get_compositor_test_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $tests[] = $row['testid'];
+    }
+
+    return $tests;
+}
+
+// returns an array containing testid of which the user is a compositor
+function get_compositor_subject_as_array($testid, $userid) {
+    $subjects = array();
+    $sql = "select distinct subjectid from tbltestcompositor where userid = '$userid' && testid='$testid'";
+    $query = mysql_query($sql) or die("Error in function get_compositor_subject_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $subjects[] = $row['subjectid'];
+    }
+
+    return $subjects;
+}
+
+//returns an array containing userid which are currently a test compositor in a test
+function get_test_compositors_as_array($testid, $sbjid = "") {
+    $compositors = array();
+    if (trim($sbjid) == "")
+        $sql = "select distinct userid from tbltestcompositor where testid='$testid'";
+    else
+        $sql = "select distinct userid from tbltestcompositor where testid='$testid' && subjectid='$sbjid'";
+
+    $query = mysql_query($sql) or die("Error in function get_test_compositors_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $compositors[] = $row['userid'];
+    }
+    return $compositors;
+}
+
+//returns an array of userid which are currently the invigilators of this test
+function get_test_invigilators_as_array($testid, $schdid = "") {
+    $invigilators = array();
+    if (trim($schdid) == "")
+        $sql = "select distinct userid from tbltestinvigilator where testid='$testid'";
+    else
+        $sql = "select distinct userid from tbltestinvigilator where testid='$testid' && schedulingid='$schdid'";
+//echo $sql; exit;
+    $query = mysql_query($sql) or die("Error in function get_test_invigilators_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $invigilators[] = $row['userid'];
+    }
+    return $invigilators;
+}
+
+//returns an array containing testid of which the user is an invigilator
+function get_invigilator_test_as_array($limit = 100) {
+    $tests = array();
+    $limit = intval(clean($limit));
+    $uid = $_SESSION['MEMBER_USERID'];
+    $sql = "select distinct testid from tbltestinvigilator where userid = '$uid' order by testid desc limit $limit";
+    $query = mysql_query($sql) or die("Error in function get_invigilator_test_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $tests[] = $row['testid'];
+    }
+
+    return $tests;
+}
+
+function is_test_administrator_of($testid = 0) {
+    $testid = clean($testid);
+    $uid = $_SESSION['MEMBER_USERID'];
+    $sql = "select initiatedby from tbltestconfig where testid='$testid'";
+    $query = mysql_query($sql) or die("Error in function is_test_administrator_of");
+    $row = mysql_fetch_array($query);
+    if ($uid == $row['initiatedby'])
+        return true;
+    else
+        return false;
+}
+
+function is_test_administrator($tadmin) {
+    $tadmin = clean($tadmin);
+    //$uid = $_SESSION['MEMBER_USERID'];
+    $sql = "select * from userrole where userid='$tadmin' && roleid='9'";
+    // echo"$sql";
+    $query = mysql_query($sql) or die("Error in function is_test_administrator");
+
+    if (mysql_num_rows($query))
+        return true;
+    else
+        return false;
+}
+
+function is_question_author($qauthor) {
+    $qauthor = clean($qauthor);
+    //$uid = $_SESSION['MEMBER_USERID'];
+    $sql = "select * from userrole where userid='$qauthor' && roleid=(select id from role where name='Question Author' limit 1 )";
+    // echo"$sql";
+    $query = mysql_query($sql) or die("Error in function is_question_author()");
+
+    if (mysql_num_rows($query))
+        return true;
+    else
+        return false;
+}
+
+function is_test_compositor_of($testid = 0, $uid = null, $sbjid = null) {
+    $testid = clean($testid);
+    $uid = ((isset($uid)) ? (clean($uid)) : ($_SESSION['MEMBER_USERID']));
+    if (isset($sbjid))
+        $sql = "select userid from tbltestcompositor where testid='$testid' && userid = '$uid' && subjectid='$sbjid'";
+    else
+        $sql = "select userid from tbltestcompositor where testid='$testid' && userid = '$uid'";
+
+    $query = mysql_query($sql) or die("Error in function is_test_compositor_of");
+    $row = mysql_fetch_array($query);
+    if ($uid == $row['userid'])
+        return true;
+    else
+        return false;
+}
+
+function get_test_invigilator_passkeys_as_array($testid, $scheduleid, array $testinvigilators) {
+    $passkeys = array();
+    foreach ($testinvigilators as $testinvigilator) {
+        $sql = "select passkey from tbltestinvigilator where userid='$testinvigilator' && testid='$testid' && schedulingid='$scheduleid'";
+        $query = mysql_query($sql) or die("error in function get_test_invigilator_passkeys_as_array()");
+        if (mysql_num_rows($query) > 0) {
+            $row = mysql_fetch_assoc($query);
+            $passkeys[] = $row['passkey'];
+        }
+    }
+    return $passkeys;
+}
+
+function get_test_passkey($testid) {
+    $passkey = "?????";
+
+    $sql = "select passkey from tbltestconfig where testid='$testid'";
+    $query = mysql_query($sql) or die("error in function get_test_passkey");
+    if (mysql_num_rows($query) > 0) {
+        $row = mysql_fetch_assoc($query);
+        $passkey = $row['passkey'];
+    }
+    return $passkey;
+}
+
+function test_taken($testid) {
+    $sql = "select * from tblscore where testid='$testid'";
+    $query = mysql_query($sql);
+    if (mysql_num_rows($query)) {
+        return true;
+    }
+    return false;
+}
+
+function is_disabled($pno) {
+    $sql = "select * from user where staffno = '$pno' && enabled = '1' limit 1";
+    $query = mysql_query($sql) or die("Error in function is_disabled()");
+    if (mysql_num_rows($query) > 0)
+        return false;
+    else
+        return true;
+}
+
+function get_test_admins_as_array() {
+    $tadmin = array();
+    $sql = "select distinct user.id from user inner join userrole on (user.id = userrole.userid) inner join role on (userrole.roleid = role.id) where role.name='Admin' order by userrole.id desc";
+    $query = mysql_query($sql) or die("Error in function get_test_admins_as_array()");
+    while ($row = mysql_fetch_assoc($query)) {
+        $tadmin[] = $row['id'];
+    }
+    return $tadmin;
+}
+
+function get_pc_registrars_as_array() {
+    $pcreg = array();
+    $sql = "select distinct user.id from user inner join userrole on (user.id = userrole.userid) inner join role on (userrole.roleid = role.id) where role.name='PC Registrar' order by userrole.id desc";
+    $query = mysql_query($sql) or die("Error in function get_pc_registrars_as_array()");
+    while ($row = mysql_fetch_assoc($query)) {
+        $pcreg[] = $row['id'];
+    }
+    return $pcreg;
+}
+
+function get_test_administrators_as_array() {
+    $tadmin = array();
+    $sql = "select distinct user.id from user inner join userrole on (user.id = userrole.userid) inner join role on (userrole.roleid = role.id) where role.name='Test Administrator' order by userrole.id desc";
+    $query = mysql_query($sql) or die("Error in function get_test_administrator_as_array()");
+    while ($row = mysql_fetch_assoc($query)) {
+        $tadmin[] = $row['id'];
+    }
+    return $tadmin;
+}
+
+function get_question_authors_as_array() {
+    $qauthor = array();
+    $sql = "select distinct user.id from user inner join userrole on (user.id = userrole.userid) inner join role on (userrole.roleid = role.id) where role.name='Question Author' order by userrole.id desc";
+    $query = mysql_query($sql) or die("Error in function get_question_authors_as_array()");
+    while ($row = mysql_fetch_assoc($query)) {
+        $qauthor[] = $row['id'];
+    }
+    return $qauthor;
+}
+
+function is_pc_registrar($uid) {
+    $sql = "select user.id from user inner join userrole on (user.id = userrole.userid) inner join role on (userrole.roleid = role.id) where role.name='PC Registrar' && user.id='$uid'";
+    $query = mysql_query($sql) or die("Error in function is_pc_registrar()");
+    if (mysql_num_rows($query) > 0)
+        return true;
+    else
+        return false;
+}
+
+function is_admin($uid) {
+    $sql = "select user.id from user inner join userrole on (user.id = userrole.userid) inner join role on (userrole.roleid = role.id) where role.name='Admin' && user.id='$uid'";
+    $query = mysql_query($sql) or die("Error in function is_admin()");
+    if (mysql_num_rows($query) > 0)
+        return true;
+    else
+        return false;
+}
+
+function is_test_invigilator_of($schdid = 0, $uid = null) {
+    $schdid = clean($schdid);
+    $uid = ((isset($uid)) ? (clean($uid)) : ($_SESSION['MEMBER_USERID']));
+    $sql = "select userid from tbltestinvigilator where schedulingid='$schdid' && userid='$uid'";
+    $query = mysql_query($sql) or die("Error in function is_test_invigilator_of");
+
+    if (mysql_num_rows($query) > 0)
+        return true;
+    else
+        return false;
+}
+
+function get_staff_pno($userid) {
+    $sql = "select staffno from user where id='$userid'";
+    $query = mysql_query($sql) or die("Error in function get_staff_pno");
+    $row = mysql_fetch_assoc($query);
+    return $row['staffno'];
+}
+
+function get_staff_userid($pno) {
+    $pno = str_replace(".", "", $pno);
+    $pno = trim($pno);
+//return $pno;
+    $sql = "select id from user where staffno='$pno'";
+    // return $sql;
+    $query = mysql_query($sql) or die("Error in function get_staff_userid");
+    if (mysql_num_rows($query) == 0)
+        return 0;
+    $row = mysql_fetch_assoc($query);
+    return $row['id'];
+}
+
+function get_staff_biodata($pno) {
+    $pno = str_replace(".", "", $pno);
+    $staff = array();
+    $sql = "select firstname, surname, othernames, tblemployee.departmentid, tbldepartment.name as dname, tblemployee.gender from tblemployee inner join tbldepartment on (tblemployee.departmentid = tbldepartment.departmentid) where personnelno='$pno'";
+    $query = mysql_query($sql) or die("Error in function get_staff_pno");
+    $row = mysql_fetch_assoc($query);
+    $staff['firstname'] = $row['firstname'];
+    $staff['surname'] = $row['surname'];
+    $staff['othernames'] = $row['othernames'];
+    $staff['departmentid'] = $row['departmentid'];
+    $staff['departmentname'] = $row['dname'];
+    $staff['gender'] = $row['gender'];
+    return $staff;
+}
+
+function get_test_id_from_schedule($schid) {
+    $schid = clean($schid);
+    $sql = "select testid from tblscheduling where schedulingid = '$schid'";
+    //echo $sql; exit;
+    $query = mysql_query($sql) or die("Error in function get_test_id_from_schedule");
+    $row = mysql_fetch_array($query);
+    return $row['testid'];
+}
+
+//get configuration parameters of a given test in array
+function get_test_config_param_as_array($testid = 0) {
+    $testid = clean($testid);
+    $param = array();
+    $sql = "select * from tbltestconfig inner join tbltestcode on (tbltestconfig.testcodeid = tbltestcode.testcodeid) inner join tbltesttype on (tbltestconfig.testtypeid = tbltesttype.testtypeid) where testid='$testid'";
+    $query = mysql_query($sql) or die("Error in function get_test_config_param_as_array");
+    $row = mysql_fetch_assoc($query);
+    $testcategory = $row['testcategory'];
+    $testtypeid = $row['testtypeid'];
+    $testtypename = $row['testtypename'];
+    $testcodeid = $row['testcodeid'];
+    $testname = $row['testname'];
+    $totalmark = $row['totalmark'];
+    $session = $row['session'];
+    $semester = $row['semester'];
+    $initiatedby = $row['initiatedby'];
+    $dateinitiated = $row['dateinitiated'];
+    $status = $row['status'];
+    $versions = $row['versions'];
+    $activeversion = $row['activeversion'];
+    $duration = $row['duration'];
+    $optionadmin = $row['optionadministration'];
+    $questionadmin = $row['questionadministration'];
+    $startmode = $row['startingmode'];
+    $displaymode = $row['displaymode'];
+    $endorsement = $row['endorsement'];
+    $time_padding = $row['timepadding'];
+    $passkey = $row['passkey'];
+
+    $param['testid'] = $testid;
+    $param['testcategory'] = $testcategory;
+    $param['testtypeid'] = $testtypeid;
+    $param['testtypename'] = $testtypename;
+    $param['totalmark'] = $totalmark;
+    $param['session'] = $session;
+    $param['semester'] = $semester;
+    $param['initiatedby'] = $initiatedby;
+    $param['dateinitiated'] = $dateinitiated;
+    $param['status'] = $status;
+    $param['versions'] = $versions;
+    $param['activeversion'] = $activeversion;
+    $param['duration'] = $duration;
+    $param['optionadmin'] = $optionadmin;
+    $param['questionadmin'] = $questionadmin;
+    $param['startmode'] = $startmode;
+    $param['displaymode'] = $displaymode;
+    $param['testcodeid'] = $testcodeid;
+    $param['testname'] = $testname;
+    $param['endorsement'] = $endorsement;
+    $param['time_padding'] = $time_padding;
+    $param['passkey'] = $passkey;
+
+    return $param;
+}
+
+function get_schedule_config_param_as_array($schid = 0) {
+    $schid = clean($schid);
+    $param = array();
+    $sql = "select * from tblscheduling inner join tblvenue on (tblvenue.venueid = tblscheduling.venueid) where tblscheduling.schedulingid='$schid'";
+    $query = mysql_query($sql) or die("Error in function get_schedule_config_param_as_array");
+    $row = mysql_fetch_assoc($query);
+    $schedulingid = $row['schedulingid'];
+    $testid = $row['testid'];
+    $venueid = $row['venueid'];
+    $venuename = $row['name'];
+    $batchcount = $row['maximumBatch'];
+    $noperbatch = $row['noPerschedule'];
+    $date = $row['date'];
+    $dailystarttime = $row['dailystarttime'];
+    $dailyendtime = $row['dailyendtime'];
+    $centreid = get_centre_id($venueid);
+    $centrename = get_centre_name($centreid);
+
+    $param['testid'] = $testid;
+    $param['schedulingid'] = $schedulingid;
+    $param['venueid'] = $venueid;
+    $param['venuename'] = $venuename;
+    $param['maximumbatch'] = $batchcount;
+    $param['noperbatch'] = $noperbatch;
+    $param['dailystarttime'] = $dailystarttime;
+    $param['dailyendtime'] = $dailyendtime;
+    $param['date'] = $date;
+    $param['centerid'] = $centreid;
+    $param['centername'] = $centrename;
+
+    return $param;
+}
+
+function get_candidate_schedule($candidateid, $testid) {
+    $sql = "select scheduleid from tblcandidatestudent inner join tblscheduling on (tblscheduling.schedulingid = tblcandidatestudent.scheduleid) where tblscheduling.testid='$testid' && tblcandidatestudent.candidateid = $candidateid";
+    $query = mysql_query($sql) or die("error in function get_candidate_schedule");
+    if (mysql_num_rows($query) > 0) {
+        $row = mysql_fetch_assoc($query);
+        return $row['scheduleid'];
+    } else
+        return null;
+}
+
+function get_schedule_freeslot($schid) {
+    $occupied = get_candidate_scheduled_count($schid);
+    $capacity = get_schedule_capacity($schid);
+
+    if ($capacity < 0)
+        return -1;
+    else
+    if ($occupied > $capacity)
+        return 0;
+    else
+        return ($capacity - $occupied);
+}
+
+function candid_exist($matric, $stdtype = "REGULAR") {
+    if ($stdtype == "REGULAR")
+        $sql = "select * from tblstudents where UPPER(matricnumber) ='" . strtoupper(trim($matric)) . "'";
+    else
+    if ($stdtype == "Post-UTME")
+        $sql = "select * from tbljamb where UPPER(RegNo) = '" . strtoupper(trim($matric)) . "'";
+    else
+    if ($stdtype == "SBRS")
+        $sql = "select * from tblsbrsstudents where (UPPER(sbrsno)='" . strtoupper(trim($matric)) . "' || UPPER(oldsbrsno)='" . strtoupper(trim($matric)) . "')";
+    else
+    if ($stdtype == "SBRS-NEW")
+        $sql = "select * from tbljamb where UPPER(RegNo) = '" . strtoupper(trim($matric)) . "'";
+    $query = mysql_query($sql) or die("Error in function (candid_exist)");
+    if (mysql_num_rows($query) > 0) {
+        return true;
+    }
+    return false;
+}
+
+function is_scheduled($testid, $matric, $stdtype = "REGULAR") {
+    //echo count($schd);
+    $schds = get_test_schedule_as_array($testid);
+    $schds[] = 0;
+    $schds_str = trim(implode(",", $schds), " ,");
+    $cid = get_candidate_id($matric, (($stdtype == "REGULAR") ? (3) : (($stdtype == "Post-UTME") ? (1) : (($stdtype == "SBRS") ? (2) : (4)))));
+    //echo "en ".$schds."<br />";
+    $sql = "select * from tblcandidatestudent where scheduleid in ($schds_str) && candidateid='$cid' ";
+    //echo $sql;
+    $query = mysql_query($sql) or die("Error in function (is_scheduled)");
+    if (mysql_num_rows($query) > 0)
+        return true;
+    else
+        return false;
+}
+
+function is_scheduled_on_subject($schd, $cid, $subs) {
+    //echo count($schd);
+    $schds = implode(",", $schd);
+    $schds = trim($schds, ",");
+    //echo "en ".$schds."<br />";
+    $subjs = implode(",", $subs);
+    $subjs = trim($subjs, ",");
+    $sql = "select * from tblcandidatestudent where scheduleid in ($schds) && subjectid in ($subjs) && candidateid='$cid' ";
+    //echo $sql;
+    $query = mysql_query($sql) or die("Error in function (is_scheduled)");
+    if (mysql_num_rows($query) > 0)
+        return true;
+    else
+        return false;
+}
+
+//gets or generates the candidate id given the matric number and student type (1=Ppst-UTME, 2=SBRS, 3= REGULAR, 4=SBRS-NEW)
+function get_candidate_id($matric, $candtype = 1 /* 1=Post-UTME, 2=SBRS, 3= REGULAR, 4=SBRS-NEW */) {
+    if ($candtype == 1)
+        $sql = "select candidateid from tblscheduledcandidate where candidatetype='1' and UPPER(RegNo) = '" . trim(strtoupper($matric)) . "'";
+    else
+    if ($candtype == 2)
+        $sql = "select candidateid from tblscheduledcandidate where candidatetype='2' and UPPER(RegNo) = '" . trim(strtoupper($matric)) . "'";
+    else
+    if ($candtype == 3)
+        $sql = "select candidateid from tblscheduledcandidate where candidatetype='3' and UPPER(RegNo) = '" . trim(strtoupper($matric)) . "'";
+    else
+    if ($candtype == 4)
+        $sql = "select candidateid from tblscheduledcandidate where candidatetype='4' and UPPER(RegNo) = '" . trim(strtoupper($matric)) . "'";
+    $query = mysql_query($sql) or die("Error in function (get_candidate_id)");
+    if (mysql_num_rows($query) == 1) {
+        $row = mysql_fetch_array($query);
+        $cid = $row['candidateid'];
+        return $cid;
+    } else {
+        if ($candtype == 1)
+            $sql = "insert into tblscheduledcandidate (candidatetype, RegNo) values (1, UPPER('$matric'))";
+        else
+        if ($candtype == 2)
+            $sql = "insert into tblscheduledcandidate (candidatetype, RegNo) values (2, UPPER('$matric'))";
+        else
+        if ($candtype == 3)
+            $sql = "insert into tblscheduledcandidate (candidatetype, RegNo) values (3, UPPER('$matric'))";
+        else
+        if ($candtype == 4)
+            $sql = "insert into tblscheduledcandidate (candidatetype, RegNo) values (4, UPPER('$matric'))";
+    }
+    $query2 = mysql_query($sql);
+    if ($query2)
+        return get_candidate_id($matric, $candtype);
+    else
+        return null;
+}
+
+function test_date_exceeded($testid = 0, $minimal = true) {
+    $testid = clean($testid);
+    if ($minimal == false)
+        $sql = "select MAX(date) from tblexamsdate where testid='$testid' && (date < CURDATE()  || date = CURDATE()) ";
+    else
+        $sql = "select * from tblexamsdate where testid='$testid' && (date < CURDATE()  || date = CURDATE()) ";
+    $query = mysql_query($sql) or die("Error in function test_date_exceeded");
+    if (mysql_num_rows($query) > 0)
+        return true;
+    return false;
+}
+
+function get_schedule_datetime($schedule, $boundary = "start") {
+    $scheduledatetime = null;
+    if ($boundary == 'start')
+        $sql = "select date, dailystarttime from tblscheduling where schedulingid = '$schedule'";
+    else
+        $sql = "select date, dailyendtime from tblscheduling where schedulingid = '$schedule'";
+    $query = mysql_query($sql) or die("Error in function get_schedule_datetime");
+    $row = mysql_fetch_assoc($query);
+    $scheduledate = $row['date'];
+    if ($boundary == "start")
+        $scheduletime = $row['dailystarttime'];
+    else
+        $scheduletime = $row['dailyendtime'];
+    $scheduledatetime = new DateTime($scheduledate . " " . $scheduletime);
+    return $scheduledatetime;
+}
+
+function get_test_datetime($testid, $boundary = 'lowest') {
+    $testdatetime = null;
+    if ($boundary == 'lowest')
+        $sql = "select date as dt, dailystarttime from tblscheduling where testid = '$testid' order by date asc, dailystarttime asc";
+    else
+        $sql = "select date as dt, dailystarttime from tblscheduling where testid = '$testid' order by date desc, dailystarttime desc";
+    $query = mysql_query($sql) or die("Error in function get_test_datetime");
+    if (mysql_num_rows($query) == 0)
+        return null;
+    $row = mysql_fetch_array($query);
+    $testdate = $row['dt'];
+    $testtime = $row['dailystarttime'];
+    $testdatetime = new DateTime($testdate . " " . $testtime);
+    return $testdatetime;
+}
+
+function test_date_registered($testid = 0, $dt = "0000-00-00") {
+    $testid = clean($testid);
+    $dt = clean($dt);
+    $sql = "select * from tblexamsdate where testid='$testid' && date = '$dt' ";
+    $query = mysql_query($sql) or die("Error in function test_date_registered");
+    if (mysql_num_rows($query) > 0)
+        return true;
+    return false;
+}
+
+function get_subject_code($sbjid) {
+    $sql = "select subjectcode from tblsubject where subjectid = $sbjid";
+    $query = mysql_query($sql) or die("Error in function (get_subject_code)");
+    $row = mysql_fetch_array($query);
+    return strtoupper($row['subjectcode']);
+}
+
+function get_subject_name($sbjid) {
+    $sql = "select subjectname from tblsubject where subjectid = $sbjid";
+    $query = mysql_query($sql) or die("Error in function (get_subject_name)");
+    $row = mysql_fetch_array($query);
+    return $row['subjectname'];
+}
+
+function date_exceeded($tid, $intaval = -300, $boundary = 'lowest') {//boundary means the lowest schedule date. Intaval means the minimum interval before lowest boundary 
+    $testdatetime = get_test_datetime($tid, $boundary);
+    $now = new DateTime();
+
+    if ($testdatetime != null && ($now->getTimestamp() - $testdatetime->getTimestamp() > $intaval))
+        return true;
+    return false;
+}
+
+function get_test_version_used_as_array($sectionid, $qid, $exclude = 0) {
+    $v = array();
+    $sql = "select version from tbltestquestion where testsectionid='$sectionid' && version <> '$exclude' && questionbankid='$qid'";
+    $query = mysql_query($sql) or die("Error in function get_test_version_used_as_array");
+    while ($row = mysql_fetch_array($query)) {
+        $v[] = $row['version'];
+    }
+    return $v;
+}
+
+function get_num_diff_lvl($sectionid, $lvl = "easy") {
+    if ($lvl == "easy")
+        $sql = "select numofeasy as difflvl from tbltestsection where testsectionid='$sectionid'";
+    else
+    if ($lvl == "moderate")
+        $sql = "select numofmoderate as difflvl from tbltestsection where testsectionid='$sectionid'";
+    else
+    if ($lvl == "difficult")
+        $sql = "select numofdifficult as difflvl from tbltestsection where testsectionid='$sectionid'";
+    $query = mysql_query($sql) or die("Error in function get_num_diff_lvl");
+    $row = mysql_fetch_array($query);
+    return $row['difflvl'];
+}
+
+function get_faculty_id($deptid) {
+    $sql = "select facultyid from tbldepartment where departmentid='$deptid'";
+    $query = mysql_query($sql) or die("Error in function get_faculty_id");
+    $row = mysql_fetch_assoc($query);
+    return $row['facultyid'];
+}
+
+function get_num_diff_lvl_count($sectionid, $version = 1, $lvl = "easy") {
+    if ($lvl == "easy")
+        $sql = "select count(tbltestquestion.questionbankid) as difflvl from tbltestquestion inner join tblquestionbank on (tblquestionbank.questionbankid= tbltestquestion.questionbankid) where tbltestquestion.version='$version' && tbltestquestion.testsectionid='$sectionid' && tblquestionbank.difficultylevel='simple'";
+    else
+    if ($lvl == "moderate")
+        $sql = "select count(tbltestquestion.questionbankid) as difflvl from tbltestquestion inner join tblquestionbank on (tblquestionbank.questionbankid= tbltestquestion.questionbankid) where tbltestquestion.version='$version' && tbltestquestion.testsectionid='$sectionid' && tblquestionbank.difficultylevel='difficult'";
+    else
+    if ($lvl == "difficult")
+        $sql = "select count(tbltestquestion.questionbankid) as difflvl from tbltestquestion inner join tblquestionbank on (tblquestionbank.questionbankid= tbltestquestion.questionbankid) where tbltestquestion.version='$version' && tbltestquestion.testsectionid='$sectionid' && tblquestionbank.difficultylevel='moredifficult'";
+    $query = mysql_query($sql) or die("Error in function get_num_diff_lvl_count");
+    $row = mysql_fetch_array($query);
+    return $row['difflvl'];
+}
+
+function get_topics_as_options($subj, $topic = "", $general = true) {
+    $sql = "select * from tbltopics where subjectid='$subj'";
+    $query = mysql_query($sql);
+
+    while ($row = mysql_fetch_array($query)) {
+        if (strtoupper($row['topicname']) == "GENERAL" && $general == false)
+            continue;
+        echo"<option value='" . $row['topicid'] . "' " . (($row['topicid'] == $topic) ? ("selected='selected'") : ("")) . ">" . $row['topicname'] . "</option>";
+    }
+}
+
+function get_test_sections_as_array($testid, $subjectid = "all") {
+    $sections = array();
+    if ($subjectid == 'all') {
+        $sql = "select testsectionid from tbltestsubject inner join tbltestsection on (tbltestsubject.testsubjectid = tbltestsection.testsubjectid) where tbltestsubject.testid='$testid'";
+    } else {
+        $sql = "select testsectionid from tbltestsubject inner join tbltestsection on (tbltestsubject.testsubjectid = tbltestsection.testsubjectid) where tbltestsubject.testid='$testid' && tbltestsubject.subjectid='$subjectid'";
+    }
+    //echo $sql; exit;
+    $query = mysql_query($sql) or die("Error in function get_test_sections_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $sections[] = $row['testsectionid'];
+    }
+    return $sections;
+}
+
+function get_test_dates_as_array($testid = 0) {
+    $testid = clean($testid);
+    $tdt = array();
+    $sql = "select * from tblexamsdate where testid='$testid' order by date asc";
+    $query = mysql_query($sql) or die("Error in function get_test_dates_as_array");
+
+    while ($row = mysql_fetch_assoc($query)) {
+        $tdt[] = $row['date'];
+    }
+    return $tdt;
+}
+
+function candidate_schedule_count($testid = 0, $dt = "0000-00-00") {
+    $testid = clean($testid);
+    $dt = clean($dt);
+    $count = 0;
+    $sql = "select distinct candidateid from tblcandidatestudent where scheduleid in (select schedulingid from tblscheduling where testid='$testid' && date='$dt')";
+    $query = mysql_query($sql) or die("Error in fucntion candidate_schedule_count");
+    $count = mysql_num_rows($query);
+    return $count;
+}
+
+function get_schedule_capacity($schdid) {
+    $schdid = clean($schdid);
+    $schd_config = get_schedule_config_param_as_array($schdid);
+    if ($schd_config['maximumbatch'] == -1)
+        return -1;
+    else {
+        return ($schd_config['maximumbatch'] * $schd_config['noperbatch']);
+    }
+}
+
+function get_centre_id($venueid = 0) {
+    $venueid = clean($venueid);
+    $venueid = intval($venueid);
+    $sql = "select centreid from tblvenue where venueid='$venueid'";
+    $query = mysql_query($sql);
+    $row = mysql_fetch_array($query);
+    return $row['centreid'];
+}
+
+function get_centre_name($cid = 0) {
+    $cid = clean($cid);
+    $cid = intval($cid);
+    $sql = "select name from tblcentres where centreid='$cid'";
+    $query = mysql_query($sql);
+    $row = mysql_fetch_array($query);
+    return $row['name'];
+}
+
+function get_center_as_options($cid = "") {
+    $output = "";
+    $cid = clean($cid);
+    $sql = "select * from tblcentres";
+    $query = mysql_query($sql) or die("Error in function (get_center_as_options)");
+    while ($row = mysql_fetch_assoc($query)) {
+        $ct = $row['name'];
+        $ctid = $row['centreid'];
+        if ($ctid == $cid)
+            $output .="<option value='$ctid' selected >$ct</option>";
+        else
+            $output .="<option value='$ctid'>$ct</option>";
+    }
+    return $output;
+}
+
+function get_venue_as_options($param = null) {
+    $output = "";
+    $vid = "";
+    if (!isset($param))
+        $sql = "select * from tblvenue";
+    else {
+
+        $sql = "select * from tblvenue where centreid = '" . clean($param['centerid']) . "'";
+        if (isset($param['venueid']))
+            $vid = clean($param["venueid"]);
+    }
+
+    $query = mysql_query($sql) or die("Error in function (get_venue_as_options)");
+    while ($row = mysql_fetch_assoc($query)) {
+        $vn = $row['name'];
+        $cvid = $row['venueid'];
+        if ($cvid == $vid)
+            $output .="<option value='$cvid' selected>$vn</option>";
+        else
+            $output .="<option value='$cvid'>$vn</option>";
+    }
+    return $output;
+}
+
+function get_venue_capacity($venueid) {
+    $venueid = clean($venueid);
+    $sql = "select capacity from tblvenue where venueid='$venueid'";
+    $query = mysql_query($sql) or die("Error in function (get_venue_capacity)");
+    if (mysql_num_rows($query) > 0) {
+        $row = mysql_fetch_array($query);
+        return $row['capacity'];
+    }
+    return 0;
+}
+
+function get_schedule_ids_as_array($tid, $dt = "") {
+    $tid = clean($tid);
+    $s = array();
+    if ($dt == "")
+        $sql = "select schedulingid from tblscheduling where testid = '$tid' order by date  asc, dailystarttime asc"; // echo $sql;
+    else
+        $sql = "select schedulingid from tblscheduling where testid = '$tid' order by date asc, dailystarttime asc"; // echo $sql;
+
+    $query = mysql_query($sql) or die("Error (get_schedule_ids_as_array)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+
+        $s[$i] = $row['schedulingid'];
+        //echo"enesi ".$s[$i]."<br />";
+        $i++;
+    }
+    //echo "umar ".implode($s);
+    return $s;
+}
+
+function get_schedule_id($tid, $venueid) {
+    $s = array();
+    $sql = "select schedulingid from tblscheduling where testid = '$tid' && venueid='$venueid'"; // echo $sql;
+    $query = mysql_query($sql) or die("Error (get_schedule_id)");
+    $row = mysql_fetch_array($query);
+    $s = $row['schedulingid'];
+    return $s;
+}
+
+function get_candidate_scheduled_count($schid) {
+    $sql = "select distinct candidateid from tblcandidatestudent where scheduleid ='$schid'";
+    $query = mysql_query($sql) or die("Error in function get_candidate_scheduled_count");
+    return mysql_num_rows($query);
+}
+
+function get_candidate_scheduled_as_array($testid) {
+    $candidates = array();
+    $sql = "select distinct candidateid from tblcandidatestudent where scheduleid in (select schedulingid from tblscheduling where testid = '$testid')";
+    $query = mysql_query($sql) or die("Error in function get_candidate_scheduled_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $candidates[] = $row['candidateid'];
+    }
+    return $candidates;
+}
+
+function get_venue_id($schd) {
+    $sql = "select venueid from tblscheduling where schedulingid=$schd";
+    $query = mysql_query($sql);
+    $row = mysql_fetch_array($query);
+    return $row['venueid'];
+}
+
+function get_venue_name($venueid) {
+    $sql = "select name, location from tblvenue where venueid=$venueid";
+    $query = mysql_query($sql);
+    $row = mysql_fetch_array($query);
+    return ($row['name'] . " (" . $row['location'] . ")");
+}
+
+function get_department_as_option($facid = null) {
+    if (isset($facid))
+        $sql = "select * from tbldepartment where facultyid='$facid'";
+    else
+        $sql = "select * from tbldepartment";
+    $result = "";
+    $query = mysql_query($sql) or die("Error in function (get_department_as_option)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $deptid = $row['departmentid'];
+        $deptname = $row['name'];
+        $result .="<option value='$deptid'>$deptname</option>";
+    }
+    return $result;
+}
+
+function get_programme_as_option($deptid = null) {
+    if (isset($deptid))
+        $sql = "select * from tblprogramme where departmentid='$deptid'";
+    else
+        $sql = "select * from tblprogramme";
+    $result = "";
+    $query = mysql_query($sql) or die("Error in function (get_programme_as_option)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $progid = $row['programmeid'];
+        $progname = $row['name'];
+        $result .="<option value='$progid'>$progname</option>";
+    }
+    return $result;
+}
+
+function get_lga_as_option($stateid = null) {
+    if (isset($stateid))
+        $sql = "select * from tbllga where stateid='$stateid'";
+    else
+        $sql = "select * from tbllga";
+    $result = "";
+    $query = mysql_query($sql) or die("Error in function (get_lga_as_option)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $lgaid = $row['lgaid'];
+        $lganame = $row['lganame'];
+        $result .="<option value='$lgaid'>$lganame</option>";
+    }
+    return $result;
+}
+
+function get_faculty_as_option() {
+    $sql = "select * from tblfaculty";
+    $result = "";
+    $query = mysql_query($sql) or die("Error in function (get_faculty_as_option)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $facid = $row['facultyid'];
+        $facname = $row['name'];
+        $result .="<option value='$facid'>$facname</option>";
+    }
+    return $result;
+}
+
+function get_state_as_option() {
+    $sql = "select * from tblstate";
+    $result = "";
+    $query = mysql_query($sql) or die("Error in function (get_state_as_option)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $stateid = $row['stateid'];
+        $statename = $row['statename'];
+        $result .="<option value='$stateid'>$statename</option>";
+    }
+    return $result;
+}
+
+function intelligentStr($str, $len = 30) {
+    if (strlen(trim($str)) <= $len)
+        return ("<span>" . trim($str) . "</span>");
+    else
+        return "<span title='" . addslashes($str) . "'>" . trim(substr($str, 0, ($len - 3)), " .") . "...</span>";
+}
+
+function is_registered_subject($tid, $sbj_id) {
+    $sql = "select * from tbltestsubject where subjectid= '$sbj_id' && testid='$tid'";
+    $query = mysql_query($sql) or die("Error in functon is_registered_subject");
+    if (mysql_num_rows($query) > 0)
+        return true;
+    return false;
+}
+
+function get_test_subjects_as_array($testid) {
+    $result = array();
+    $sql = "select subjectid from tbltestsubject where testid= '$testid'";
+    $query = mysql_query($sql) or die("Error in functon get_test_subjects_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $result[] = $row['subjectid'];
+    }
+    return $result;
+}
+
+function get_test_schedule_as_array($tid) {
+    $schedules = array();
+    $tid = clean($tid);
+    $sql = "select schedulingid from tblscheduling where testid = '$tid'";
+    $query = mysql_query($sql) or die("Error in function (get_test_schedule_as_array)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $schedules[] = $row['schedulingid'];
+        $i++;
+    }
+    return $schedules;
+}
+
+function get_previewer_subject_as_array($testid, $userid) {
+    $subjects = array();
+    $sql = "select distinct subjectid from tblquestionpreviewer where userid = '$userid' && testid='$testid'";
+    $query = mysql_query($sql) or die("Error in function get_previewer_subject_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $subjects[] = $row['subjectid'];
+    }
+
+    return $subjects;
+}
+
+function get_question_previewer_as_array($testid, $sbjid = "") {
+    $previewers = array();
+    if (trim($sbjid) == "")
+        $sql = "select distinct userid from tblquestionpreviewer where testid='$testid'";
+    else
+        $sql = "select distinct userid from tblquestionpreviewer where testid='$testid' && subjectid='$sbjid'";
+
+    $query = mysql_query($sql) or die(" $sql Error in function get_question_previewer_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $previewers[] = $row['userid'];
+    }
+    return $previewers;
+}
+
+function is_question_viewer_of($testid = 0, $uid = null, $sbjid = null) {
+    $testid = clean($testid);
+    $uid = ((isset($uid)) ? (clean($uid)) : ($_SESSION['MEMBER_USERID']));
+    if (isset($sbjid))
+        $sql = "select userid from tblquestionpreviewer where testid='$testid' && userid = '$uid' && subjectid='$sbjid'";
+    else
+        $sql = "select userid from tblquestionpreviewer where testid='$testid' && userid = '$uid'";
+//echo $sql; exit;
+    $query = mysql_query($sql) or die("Error in function is_question_viewer_of");
+    $row = mysql_fetch_array($query);
+    if ($uid == $row['userid'])
+        return true;
+    else
+        return false;
+}
+
+// there is a mistake here i suppose to name the function as get_test_versions
+function get_test_versions_as_array($testid) {
+    $sql = "select versions from tbltestconfig where testid = '$testid'";
+    $query = mysql_query($sql) or die("Error in function get_test_versions_as_array()");
+    $row = mysql_fetch_array($query);
+    $versions = $row['versions'];
+    return $versions;
+}
+
+function get_previewer_test_as_array($limit = -1) {
+    $tests = array();
+    $limit = intval(clean($limit));
+    $uid = $_SESSION['MEMBER_USERID'];
+    if ($limit != -1 && $limit)
+        $sql = "select distinct testid from tblquestionpreviewer where userid = '$uid' order by testid desc limit $limit";
+    else
+        $sql = "select distinct testid from tblquestionpreviewer where userid = '$uid' order by testid desc limit 100";
+    $query = mysql_query($sql) or die("Error in function get_previewer_test_as_array");
+    while ($row = mysql_fetch_assoc($query)) {
+        $tests[] = $row['testid'];
+    }
+
+    return $tests;
+}
+
+function get_test_question_count($testid, $test_subject, $version) {
+    $sql = "select * from tbltestquestion inner join tbltestsection on (tbltestsection.testsectionid = tbltestquestion.testsectionid)
+        inner join tbltestsubject on (tbltestsubject.testsubjectid = tbltestsection.testsubjectid) 
+        where tbltestsubject.testid = '$testid' && tbltestsubject.subjectid = '$test_subject' && tbltestquestion.version='$version'";
+    $query = mysql_query($sql) or die("Error in function get_test_question_count");
+    return mysql_num_rows($query);
+}
+
+function get_faculty_as_array() {
+    $sql = "select * from tblfaculty";
+    $result = array();
+    $query = mysql_query($sql) or die("Error in function (get_faculty_as_option)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $facid = $row['facultyid'];
+        $facname = $row['name'];
+        $result[] = array("facultyid" => $facid, "facultyname" => $facname);
+    }
+    return $result;
+}
+
+function get_mapped_faculty_as_array($schd) {
+    $sql = "select facultyid from tblfaculty_schedule_mapping where schedulingid='$schd'";
+    $result = array();
+    $query = mysql_query($sql) or die("Error in function (get_mapped_faculty_as_array)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $result[] = $row['facultyid'];
+    }
+    return $result;
+}
+
+function get_schedules_mapped_to_faculty_as_array($facid, $testid) {
+    $sql = "select schedulingid from tblfaculty_schedule_mapping where facultyid='$facid'  && schedulingid in (select schedulingid from tblscheduling where testid = '$testid')";
+    $result = array();
+    //echo $sql; exit;
+    $query = mysql_query($sql) or die("Error in function (get_schedules_mapped_to_faculty_as_array)");
+    $i = 0;
+    while ($row = mysql_fetch_array($query)) {
+        $result[] = $row['schedulingid'];
+    }
+    return $result;
+}
+
+function get_jamb_subject_combination($RegNumb) {
+    $subjects = array();
+    $sql1 = "select * from tbljamb where RegNo = '$RegNumb' ";
+    $query = mysql_query($sql1);
+    $row = mysql_fetch_array($query);
+    $sbjcode = array();
+    $sbjcode[] = $row['Subj2'];
+    $sbjcode[] = $row['Subj3'];
+    $sbjcode[] = $row['Subj4'];
+    $sbjcode[] = 'ENG';
+    foreach ($sbjcode as $sbjcd) {
+        $sqlsbjid = "select subjectid from tblsubject where subjectcode='$sbjcd'";
+        $sbjidquery = mysql_query($sqlsbjid);
+        $sbjidrow = mysql_fetch_array($sbjidquery);
+        $sbjid = $sbjidrow[0];
+        $subjects[] = $sbjid;
+    }
+    return $subjects;
+}
+
+function get_jamb_candidate_details($regNo) {
+    $param = array();
+    $sql = "select * from tbljamb where RegNo = '$regNo'";
+    $query = mysql_query($sql);
+    if (mysql_num_rows($query) == 0) {
+        return $param;
+    }
+    $row = mysql_fetch_array($query);
+    $candname = $row['CandName'];
+    $stateoforigin = $row['StateOfOrigin'];
+    $lga = $row["LGA"];
+    $sex = $row["Sex"];
+    $age = $row["Age"];
+    $engsore = $row["EngScore"];
+    $subjcode2 = $row["Subj2"];
+    $subjscore2 = $row["Subj2Score"];
+    $subjcode3 = $row["Subj3"];
+    $subjscore3 = $row["Subj3Score"];
+    $subjcode4 = $row["Subj4"];
+    $subjscore4 = $row["Subj4Score"];
+    $totalscore = $row["TotalScore"];
+    $faculty = $row["Faculty"];
+    $course = $row["Course"];
+
+    $param['candname'] = $candname;
+    $param['regno'] = $regNo;
+    $param['course'] = $course;
+    $param['faculty'] = $faculty;
+    $param['stateoforigin'] = $stateoforigin;
+    $param['lga'] = $lga;
+    $param['sex'] = $sex;
+    $param['age'] = $age;
+    $param['subjcode2'] = $subjcode2;
+    $param['subjcode3'] = $subjcode3;
+    $param['subjcode4'] = $subjcode4;
+    $param['engscore'] = $engsore;
+    $param['subjscore2'] = $subjscore2;
+    $param['subjscore3'] = $subjscore3;
+    $param['subjscore4'] = $subjscore4;
+    $param['totalscore'] = $totalscore;
+    return $param;
+}
+
+function get_jamb_candidate_schedule_details($regNo, $testid) { //date venue starttime batch
+    $param = array();
+    $candidateid = get_candidate_id($regNo, 1);
+    if (!is_scheduled($testid, $regNo, 'Post-UTME')) {
+        return $param;
+    }
+    //get the timepadding and duration
+    $test_config = get_test_config_param_as_array($testid);
+    $param['time_padding'] = $test_config['time_padding'];
+    $param['duration'] = $test_config['duration'];
+
+    //get the venue center date and dailystarttime
+    $candidateschedule = get_candidate_schedule($candidateid, $testid);
+    $schedule_config = get_schedule_config_param_as_array($candidateschedule);
+
+    $param['venuename'] = $schedule_config['venuename'];
+    $param['venueid'] = $schedule_config['venueid'];
+    $param['centername'] = $schedule_config['centername'];
+    $param['centerid'] = $schedule_config['centerid'];
+    $param['date'] = $schedule_config['date'];
+    $param['dailystarttime'] = $schedule_config['dailystarttime'];
+    $param['noperbatch'] = $schedule_config['noperbatch'];
+    $param['totaldur'] = $param['duration'] + $param['time_padding'];
+    $presql="select min(add_index) as ab from tblcandidatestudent where candidateid=$candidateid and scheduleid=$candidateschedule limit 1";
+        $prequery = mysql_query($presql);
+        $prerow=  mysql_fetch_array($prequery);
+        $adind= $prerow['ab'];
+        
+$sql = "select distinct add_index from tblcandidatestudent where scheduleid=$candidateschedule && candidateid <> $candidateid && add_index < $adind group by candidateid order by add_index";
+    $query = mysql_query($sql);
+    $numrows= mysql_num_rows($query);
+    
+    $schd_count = $numrows;
+
+    $batch = floor($schd_count / $param['noperbatch']) + 1;
+    $param['batch'] = $batch;
+    $testdateobj = new DateTime($param['date'] . " " . $param['dailystarttime']);
+    $stt = $param['totaldur'] * ($batch - 1);
+    $testdateobj->add(new DateInterval("PT" . $stt . "M"));
+    //$startdate = $testdateobj->format("l, jS F, Y");
+    //$starttime = $testdateobj->format("g:i a");
+    $param['candidatestartdatetime'] = $testdateobj;
+    return $param;
+}
+
+
+function embed_user_pic($regno) {
+   
+    $finalURL = get_current_photo($regno);
+
+    echo $finalURL;
+}
+
+
+
+function get_current_photo($regno) {
+    $regno = trim(strtolower($regno));
+    $finalURL = '';
+    $r_v = '';
+    
+    $s = '../picts/';
+
+    $r_v = $s . $regno . '.jpeg';
+    $r_v1 = $s . $regno . '.jpg';
+    $r_v2 = $s . $regno . '.png';
+    $r_v3 = $s . $regno . '.gif';
+    
+    if (file_exists($r_v)) {
+        $finalURL = "<img src='" . $r_v . "' width='150px' height='170px' style='border:solid 0.5px #000000'>";
+    } 
+    else if(file_exists($r_v1)) {
+        $finalURL = "<img src='" . $r_v1 . "' width='150px' height='170px' style='border:solid 0.5px #000000'>";
+    }
+    else if(file_exists($r_v2)) {
+        $finalURL = "<img src='" . $r_v2 . "' width='150px' height='170px' style='border:solid 0.5px #000000'>";
+    }
+    else if(file_exists($r_v3)) {
+        $finalURL = "<img src='" . $r_v3 . "' width='150px' height='170px' style='border:solid 0.5px #000000'>";
+    }
+    
+    if($finalURL==''){
+        $regno = trim(strtoupper($regno));
+    $r_v = $s . $regno . '.jpeg';
+    $r_v1 = $s . $regno . '.jpg';
+    $r_v2 = $s . $regno . '.png';
+    $r_v3 = $s . $regno . '.gif';
+    
+    if (file_exists($r_v)) {
+        $finalURL = "<img src='" . $r_v . "' width='150px' height='170px' style='border:solid 0.5px #000000'>";
+    } 
+    else if(file_exists($r_v1)) {
+        $finalURL = "<img src='" . $r_v1 . "' width='150px' height='170px' style='border:solid 0.5px #000000'>";
+    }
+    else if(file_exists($r_v2)) {
+        $finalURL = "<img src='" . $r_v2 . "' width='150px' height='170px' style='border:solid 0.5px #000000'>";
+    }
+    else if(file_exists($r_v3)) {
+        $finalURL = "<img src='" . $r_v3 . "' width='150px' height='170px' style='border:solid 0.5px #000000'>";
+    }
+    else{
+        $finalURL = "<img src='../assets/img/photo.png' alt='image not uploaded' title='image not uploaded' width='149px' height='168px'  style='border:solid 0.5px #000000'>";
+    }
+    }
+
+    return $finalURL;
+}
+?>

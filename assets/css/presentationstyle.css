@@ -1,0 +1,97 @@
+
+
+.questionanswerdiv{
+    background-image: url('../img/qa_bg.png');
+    background-repeat:  repeat;
+    padding-left:5px;
+    padding-bottom: 5px;
+    margin-bottom: 20px;
+    margin-top: 50px;
+
+
+}
+.optionlabel{
+    min-height: 10px;
+    text-align: left;
+    vertical-align: top;
+}
+.qadiv
+{
+    padding-left: 10px;
+    box-shadow:-1px 3px 8px -3px #333333;
+    -o-box-shadow:-1px 3px 8px -3px #333333;
+    -ms-box-shadow:-1px 3px 8px -3px #333333;
+    -webkit-box-shadow:-1px 3px 8px -3px #333333;
+    -moz-box-shadow:-1px 3px 8px -3px #333333;
+}
+
+.questiondiv{
+    background-color:#ffffff;
+}
+
+.answerdiv{
+    background-color:#ffffff;
+   
+}
+
+.ansopt{
+    list-style-type:  upper-alpha;
+    list-style-position: outside;
+    vertical-align: top;
+    text-align: left;
+}
+.ansopt li{
+    vertical-align:top;
+    padding:0px; margin:0px;
+}
+
+.answer
+{
+    background-repeat: no-repeat;
+    background-position: 95% 50%;
+    border-style:solid;
+    border-color: #b5d1de;
+    border-width: 1px;
+    padding:0px;
+}
+.answertb
+{
+    border-style:  none;
+    width: 100%;
+    margin:0px;
+    margin-top:-40px;
+}
+.fullname span, .matric span {font-weight: bold; font-family: 'Arial Narrow'; font-size: 14px; text-decoration: underline;}
+#print-ctr a{
+    text-decoration: none;
+}
+#print-ctr{position:fixed; top:30%; left:90%;
+border-style:solid;
+border-width:1px;
+border-color:green;
+background-color: #b5d1de; padding:10px;
+font-weight: bold; font-family: 'Arial Narrow'; font-size: 14px; text-decoration: none;}
+.presentation-title{
+    border-bottom-style: solid;
+    border-bottom-color: #cccccc;
+    border-bottom-width: 2px;
+    margin-bottom: 10px;
+}
+.answertb tr td{padding:0px; margin: 0px; border-collapse: collapse;vertical-align: middle;}
+.answertb tr td:first-child
+{
+    width: 90%;
+    padding-left: 5px;
+}
+.answertb tr td:last-child
+{
+    width: 10%;
+}
+
+.presentation{
+    width:800px;
+    margin-left: auto;
+    margin-right:auto;
+}
+
+table, tr, td, tbody, tfoot, thead{padding:0px; margin:0px; border-collapse: collapse; border-width: 0px;}

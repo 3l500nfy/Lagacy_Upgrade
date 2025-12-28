@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>
+            Computer Based Test        </title>
+        <link href="http://localhost/CBTTEST//assets/css/jquery-ui.css" type="text/css" rel="stylesheet"></link>
+        <link href="http://localhost/CBTTEST//assets/css/globalstyle.css" type="text/css" rel="stylesheet"></link>
+        <link href="http://localhost/CBTTEST//assets/css/tconfigstyle.css" type="text/css" rel="stylesheet"></link>
+        <link rel="stylesheet" href="http://localhost/CBTTEST//assets/css/select2.min.css" type="text/css"></link>
+        <style type="text/css">
+            .control-group{
+                margin-top:10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div style="text-align:center;"><img src="http://localhost/CBTTEST//assets/img/dariya_logo1.png" /></div>
+        <div class="span5 style-div" style="margin-left: auto; width:350px; margin-top: 70px; padding-left: 30px; margin-right: auto;">
+            <div class="contentbox" style="padding-top: 10px;">
+                <div class="page-header" style="border-bottom-color: #cccccc; border-bottom-style: solid; border-bottom-width: 1px;">
+                    <h2 style="font-family: 'Segoe UI',Helvetica,Arial,sans-serif; color:rgb(51, 51, 51); text-rendering: optimizelegibility; font-size: 18px; font-weight: 700; line-height:40px; ">Please Login <small>to Start the Examination</small></h2>
+                </div>
+                 
+
+                                
+                <form action="login_exec.php" method="post" class="style-frm" autocomplete='off'>
+
+                    <div class="control-group">
+                        <label for="examstype" style="font-weight: bold;">Exam Type</label>
+                        <div class="controls">
+                            <select name="testid" id="testid" >
+                                <option value=''>Select Test</option>                            </select>
+                        </div>
+                    </div><!-- /.control-group -->			
+                    <div class="control-group">
+                        <label for="username" id="usnlbl" style="font-weight: bold;">UserName</label>
+                        <div class="controls">
+                            <input class="input-block-level" type="text" id="username" name="username" placeholder="Username" required autocomplete='off'/>
+                        </div>
+                    </div><!-- /.control-group -->
+                    <div class="control-group">
+                        <label for="password" id="pwdlbl" style="font-weight: bold;">Password</label> 
+                        <div class="controls">
+                            <input class="input-block-level" type="password" name="password" id="password" placeholder="Password" required autocomplete='off'/>
+                            <select style="display:none;" disabled name="password" id="password2">
+                                <option value ="">Select Your State</option>
+                                <option value='Abia'>Abia</option><option value='Adamawa'>Adamawa</option><option value='Akwa Ibom'>Akwa Ibom</option><option value='Anambra'>Anambra</option><option value='Bauchi'>Bauchi</option><option value='Bayelsa'>Bayelsa</option><option value='Benue'>Benue</option><option value='Borno'>Borno</option><option value='Cross River'>Cross River</option><option value='Delta'>Delta</option><option value='Ebonyi'>Ebonyi</option><option value='Edo'>Edo</option><option value='Ekiti'>Ekiti</option><option value='Enugu'>Enugu</option><option value='Gombe'>Gombe</option><option value='Imo'>Imo</option><option value='Jigawa'>Jigawa</option><option value='Kaduna'>Kaduna</option><option value='Kano'>Kano</option><option value='Katsina'>Katsina</option><option value='Kebbi'>Kebbi</option><option value='Kogi'>Kogi</option><option value='Kwara'>Kwara</option><option value='Lagos'>Lagos</option><option value='Nasarawa'>Nasarawa</option><option value='Niger'>Niger</option><option value='Ogun'>Ogun</option><option value='Ondo'>Ondo</option><option value='Osun'>Osun</option><option value='Oyo'>Oyo</option><option value='Plateau'>Plateau</option><option value='Rivers'>Rivers</option><option value='Sokoto'>Sokoto</option><option value='Taraba'>Taraba</option><option value='Yobe'>Yobe</option><option value='Zamfara'>Zamfara</option><option value='FCT'>FCT</option><option value='Non-Nigerian'>Non-Nigerian</option>                            </select>
+                        </div>                
+
+                    </div><!-- /.control-group -->
+
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-info btn-block" style="font-weight: bold;">Sign in</button>
+                        </div>
+                    </div> <!-- /.control-group -->
+                </form>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://localhost/CBTTEST//assets/js/jquery-1.9.0.js"></script>
+        <script type="text/javascript" src="http://localhost/CBTTEST//assets/js/jquery-ui-1.10.0.custom.min.js"></script>
+        <script type="text/javascript" src="http://localhost/CBTTEST//assets/js/cbt_js.js"></script>
+        <script type ="text/javascript" src ="../assets/js/select2.min.js"></script>
+
+        <script type="text/javascript">
+            setTimeout(function () {
+                location.reload();
+            }, 360 * 1000);
+
+            $(document).ready(function () {
+                $('#username').focus();
+                $("#testid").select2();
+            });
+
+            $(document).on('change click', '#testid', function () { //alert($('#testid option:selected').text());
+                var tname = $('#testid option:selected').text();
+                var match = tname.match(/Post-UTME/i);
+
+                if (match) {
+                    $('#usnlbl').text('Jamb No.');
+                    $('#pwdlbl').text('State');
+                    $('#username').attr('placeholder', 'Jamb No.');
+                    $('#password').attr('placeholder', 'State');
+                    $('#password').hide();
+                    $('#password').prop('disabled',true);
+                    $('#password2').show();
+                    $('#password2').prop('disabled',false);
+                } else {
+                    $('#usnlbl').text('UserName');
+                    $('#pwdlbl').text('Password');
+                    $('#username').attr('placeholder', 'UserName');
+                    $('#password').attr('placeholder', 'Password');
+                    $('#password2').hide();
+                    $('#password2').prop('disabled',true);
+                    $('#password').show();
+                    $('#password').prop('disabled',false);
+                }
+            });
+            $('#testid option:selected').trigger('click');
+
+        </script>
+    </body>
+</html>

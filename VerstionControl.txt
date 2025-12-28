@@ -1,0 +1,7 @@
+2021-06-19 - test1/testfunctions.php - Time writing to database correction - V1.0.0.1 
+2021-06-19 - test1/testfunctions.php - Fix: Ensure elapsed is 0 for new students if starttime is not set or invalid, preventing immediate logout and 'already submitted' error - V1.0.0.3 
+2021-06-19 - admin_toolbox/invigilators/save_time_adjustment.php - Fix: Use full datetime (Y-m-d H:i:s) for curenttime to match testfunctions.php and prevent DateTime parse errors - V1.0.0.4 
+2021-06-19 - test/starttest.php - Update: Navigation panel click handler now uses .qbut class to match navigation panel HTML and ensure question loading works - V1.0.0.5 
+-- Options
+
+www.github.com/exampractice.git

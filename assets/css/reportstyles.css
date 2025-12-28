@@ -1,0 +1,319 @@
+/* 
+    Document   : reportstyles
+    Created on : Apr 1, 2013, 9:08:29 PM
+    Author     : Enesi
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+.filtered{
+    display:none;
+}
+input, select, textarea
+{
+    margin:0px;
+    padding:0px;
+    vertical-align: top;
+
+}
+#container
+{
+    width:1200px;
+    min-height: 500px;
+}
+
+#report-exam-selector-td, #report-summary-td, #report-gradestat-td
+{
+    vertical-align:  top;
+    padding:3px;
+}
+
+#report-exam-selector
+{
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    border-width:1px;
+    border-style:solid;
+    border-color:#cccccc;
+    padding:10px;
+}
+
+.report-frm-label
+{
+    font-weight: bold;
+}
+
+.report-frm-widget
+{
+    padding-bottom: 10px;
+}
+
+.issue
+{
+    border-style: solid;
+    border-color:red;
+    border-width: 1px;
+}
+
+#report-filters
+{
+    display:none;
+    font-size: 0.8em;
+    padding:20px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    border-width:1px;
+    border-style:solid;
+    border-color:#cccccc;
+    vertical-align: top;
+    min-width:800px;
+    /*max-width:800px;*/
+    
+
+
+}
+
+#filter-frm
+{ 
+    vertical-align:top;
+}
+
+#report-filters input[type=text], #report-filters select
+{
+    font-size: 0.9em;
+    width:150px;
+    padding-top: 10px;
+}
+#report-show-filter-control, #report-hide-filter-control
+{
+    padding-left:800px;
+}
+
+#report-apply-filter-control{
+    text-align: center;
+}
+#show-control, #hide-control
+{
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    width:90px;
+    border-style: solid;
+    border-color: #cccccc;
+    border-width: 1px;
+    padding:5px;
+    text-align: center;
+}
+
+#show-control:hover, #hide-control:hover
+{
+    background-color:#cccccc;
+    cursor: pointer;
+}
+
+.filter-widget
+{
+    margin:3px;
+    border-radius:3px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    border-style: solid;
+    border-color: #cccccc;
+    border-width: 1px;
+    padding:3px;
+    min-width: 120px;
+    max-width: 300px;
+    max-height: 150px;
+    -webkit-box-shadow:  0px 2px 4px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow:  0px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow:  0px 2px 4px rgba(0, 0, 0, 0.5);
+    background-image:  url('../img/bg-report.png');
+    background-repeat: repeat-x;
+
+}
+
+.filter-widget-q
+{
+    height: 230px;
+    max-height: 230px;
+    max-width:700px;
+}
+.fw
+{
+    overflow: auto;
+    max-height:120px;
+}
+#fw-quest
+{
+    height: 210px;
+    max-height: 210px;
+}
+
+.filter-label
+{
+    cursor:pointer;
+    display: block;
+
+}
+
+.filter-label:hover
+{
+    background-color:#7ab5d3;
+
+}
+
+
+.widget-wrapper
+{
+    height: 150px;
+    vertical-align: top;
+    display: inline-block;
+    margin:3px;
+    margin-bottom: 10px;
+}
+
+.widget-wrapper-q
+{
+    height: 250px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.widget-wrapper hr
+{
+    margin:0px;
+    padding:0px;
+    width:80%;
+    margin-left: auto;
+    margin-right:auto;
+}
+
+.button-style
+{
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-style: solid;
+    border-color: #cccccc;
+    border-width: 1px;
+    padding:5px;
+    text-align: center;
+    cursor: pointer; 
+}
+
+.widget-gs-wrapper
+{
+    display:inline-block;
+    margin:4px;
+    padding:2px;
+    min-width: 70px;
+}
+.widget-gs-wrapper label
+{
+    font-weight: bold;
+}
+
+.button-style:hover
+{
+    background-color:#cccccc;
+}
+
+/** Styling the data*/
+#report-summary-table, #report-gradestat-table
+{
+    margin-top: 20px;  
+}
+
+#report-summary-header th, #report-gradestat-header th 
+{
+    padding:3px;
+    background-color: #dbdbdb;
+    border-style: solid;
+    border-width: 2px;
+    border-color:#bdbdf9;
+}
+
+.f1
+{
+    min-width: 150px;
+}
+.f2
+{
+    min-width: 150px;
+}
+.f3
+{
+    min-width: 120px;
+}
+.f4
+{
+    min-width: 50px;
+}
+.f5
+{
+    min-width: 70px;
+}
+
+/** for selecting question in question statistics****/
+.quests
+{
+    padding:5px;
+    border-style: solid;
+    border-color:#eaeaea;
+    border-width: 1px;
+    margin:5px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    -o-border-radius:3px;
+    -ms-border-radius:3px;
+    border-radius:3px;
+    cursor: pointer;
+}
+
+.quests:hover
+{
+    background-color: #dbdbdb;
+}
+
+.qchosen{
+    background-color: #e7e7e7;
+}
+/***/
+
+/***for grade slider ***/
+#widget-wrapper-grade fieldset, #widget-wrapper-grade legend
+{
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    -o-border-radius:3px;
+    -ms-border-radius:3px;
+    border-radius:3px;
+}
+
+#widget-wrapper-grade legend
+{
+    font-size: 1em; 
+    margin:0px; 
+    padding:5px; 
+    width: auto; 
+    border-style: solid; 
+    line-height: normal; 
+    border-width:1px; 
+    border-color:#cccccc;
+}
+
+#widget-wrapper-grade fieldset
+{
+    padding:10px; 
+    border-width:1px; 
+    border-style: ridge; 
+    border-color: #cccccc; 
+}
+/*****/

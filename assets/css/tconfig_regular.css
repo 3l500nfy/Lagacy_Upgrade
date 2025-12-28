@@ -1,0 +1,269 @@
+
+#cover {
+
+    margin-left: auto;
+    margin-right: auto;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #DCDCDC;
+    min-width: 400px;   
+    min-height: 300px;
+    -moz-border-radius: 5px ;
+    -webkit-border-radius: 5px ;
+    padding: 5px;
+}
+
+#stplinks
+{
+    background-color:  #DCDCDC;
+    border-right-style: solid;
+    border-right-color:  #cccccc;
+    border-right-width: 2px;
+    height: inherit;
+    margin-bottom: auto;
+    margin-top: auto;
+width:200px;
+}
+
+#stplinks a
+{
+    text-decoration: none;
+}
+
+#stpfrm
+{
+    min-width: 500px;
+}
+.current
+{
+    color:#378473;
+    font-weight:bold;
+}
+
+#stplinks ol
+{
+    vertical-align: middle;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+    list-style-position: inside;
+}
+
+.frm #summarydiv{
+    min-height: 200px;
+}
+
+.frm
+{
+    margin-top: 40px;
+    margin-left: 10px;
+    min-height: 300px;
+
+}
+
+.frm select, .frm input
+{
+    margin-left: 50px;
+}
+
+.frmlabel
+{
+    font-weight: bold;
+}
+
+#second-step, #third-step, #fourth-step, #fifth-step, #sixth-step
+{
+    display:none;
+}
+
+.step_heading
+{
+    margin:0px;
+    background-color:  #7aba7b;
+    -moz-border-radius: 3px ;
+    -webkit-border-radius: 3px ;
+    padding-left: 5px;
+}
+
+#dts
+{
+    background-color: white;
+    border-width: 1px;
+    border-style: groove;
+    border-color: #cccccc;
+    min-height: 200px;
+    max-height: 200px;
+    -moz-border-radius: 5px ;
+    -webkit-border-radius: 5px ;
+    padding: 5px;
+    overflow: auto;
+    width:350px;
+    margin-left: 10px;
+}
+
+.dtitem
+{
+    background-color:lightgreen;
+    border-width: 1px;
+    border-color:green;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: 1px;
+    color: darkgreen;
+    margin:3px;
+    display:inline-block;
+    cursor: pointer;
+    border-style:solid;
+
+}
+
+.faclist
+{
+    border-width: 1px;
+    border-style:solid;
+    border-color: #7aba7b;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.proglist
+{
+    border-width: 1px;
+    border-style:solid;
+    border-color: #7aba7b;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    padding: 5px;
+    max-height: 300px;
+    min-width:150px;
+    overflow: auto;
+}
+
+.progitem input
+{
+    padding:0px;
+    margin: 0px;
+    margin-bottom: 3px;
+    border-style: none;
+
+}
+.progitem label{
+    cursor: pointer;
+}
+
+.facitem
+{
+    cursor:pointer;
+    padding-left: 5px;
+    border-width: 1px;
+    border-style:solid;
+    border-color: transparent;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    vertical-align:  middle;
+}
+
+.progitem
+{
+    
+    padding-left: 5px;
+    border-width: 1px;
+    border-style:solid;
+    border-color: transparent;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    vertical-align:  middle;
+}
+
+.facitem:hover
+{
+    border-color:#7aba7b;
+    background-color:  #cfefd2;
+}
+
+.progitem:hover
+{
+    border-color:#7aba7b;
+    background-color:  #cfefd2;
+}
+
+.facfocus
+{
+    background-color: #7aba7b;
+    color:white;
+}
+
+.dticon
+{
+    border-width:0px;
+    border-style:none;
+    padding:1px;
+    margin:0px;
+    display:inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+
+}
+
+.dtval{
+    padding-left: 2px;
+    padding-right: 2px;
+    border-right-color: white;
+    border-right-style: solid;
+    border-right-width: 1px;
+    display:inline-block;
+}
+
+.dtitem:hover
+{
+    background-color: #7aba7b;
+    color:white;
+}
+
+#frmtb
+{
+    width:100%;
+}
+
+.stb tr td:first-child
+{
+    width:auto;
+    font-weight: bold;
+}
+.stb fieldset
+{
+    margin-bottom: 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding:10px;
+    border-style:dashed;
+    border-color:#999999;
+    padding-top:2px;
+    border-width:1px;
+    font-weight: normal;
+    
+}
+.lgd
+{
+    border-color:  #999999;
+    width:auto;
+    border-width: 1px;
+    border-style: solid;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background-color: #cccccc;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding:5px;
+    font-size: 14px;
+    font-weight: bold;
+
+}

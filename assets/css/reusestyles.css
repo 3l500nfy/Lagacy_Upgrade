@@ -1,0 +1,61 @@
+/* 
+    Document   : reusestyles
+    Created on : Apr 1, 2013, 9:08:29 PM
+    Author     : Enesi
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+input, select, textarea
+{
+    margin:0px;
+    padding:0px;
+    vertical-align: top;
+
+}
+#container
+{
+    width:1200px;
+    min-height: 500px;
+}
+
+#reuse-exam-selector-td, #reuse-summary-td
+{
+    vertical-align:  top;
+    padding:3px;
+}
+
+#reuse-exam-selector
+{
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border-radius:5px;
+    border-width:1px;
+    border-style:solid;
+    border-color:#cccccc;
+    padding:10px;
+}
+
+.reuse-frm-label
+{
+    font-weight: bold;
+}
+
+.reuse-frm-widget
+{
+    padding-bottom: 10px;
+}
+
+.issue
+{
+    border-style: solid;
+    border-color:red;
+    border-width: 1px;
+}
+
+/***/

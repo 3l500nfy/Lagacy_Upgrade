@@ -1,0 +1,89 @@
+#sel
+{
+    border-width: 1px;
+    border-color: #999999;
+    border-style: solid;
+    -moz-border-radius: 5px ;
+    -webkit-border-radius: 5px ;
+    padding: 5px;
+}
+#sectionlist, #sectionlist tr, #sectionlist td, #sectionlist th{
+    border-collapse:  collapse;
+    border-style: solid;
+    border-color:  #999999;
+    border-width:1px;
+}
+#sectionlist th{
+    background-color:  #c5c5c5;
+}
+
+#subjlist{
+    -moz-border-radius: 5px ;
+    -webkit-border-radius: 5px ;
+    border-style:solid;
+    border-width:1px;
+    border-color:  #cccccc;
+    width:300px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+#qcriteria
+{
+    padding:20px;
+    background-color: white;
+    border-style:solid;
+    border-width:1px;
+    border-color: #cccccc;
+    -moz-border-radius: 3px ;
+    -webkit-border-radius: 3px ;
+    border-radius: 3px ;
+
+}
+
+#qlist
+{
+    margin-top:10px;
+    padding:20px;
+    background-color: white;
+    border-style:solid;
+    border-width:1px;
+    border-color: #cccccc;
+    -moz-border-radius: 3px ;
+    -webkit-border-radius: 3px ;
+    border-radius: 3px ;
+
+}
+
+#quest ,#questprop
+{
+    min-height: 300px;
+    -moz-border-radius: 3px ;
+    -webkit-border-radius: 3px ;
+    border-radius: 3px ;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #cccccc;   
+}
+.moreinf, .fullquest{
+    font-size: 0.75em;
+    color:#cccccc;
+}
+
+.ql{
+    -moz-border-radius: 3px ;
+    -webkit-border-radius: 3px ;
+    border-radius: 3px ;
+    border-width: 1px;
+    border-style: solid;
+    border-color:#e5f7e6;
+    background-color:#f5fbf5;
+    margin-top: 10px;
+}
+
+#qcountinfo
+{
+    display:none;
+    font-style: italic;
+}

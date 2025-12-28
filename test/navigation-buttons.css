@@ -1,0 +1,613 @@
+/* Add this to loadquestion.php output or modify the JavaScript to generate this structure */
+.nav-buttons-container {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+    margin: 20px auto;
+}
+
+.nav-button-wrapper {
+    flex: 0 0 48%;
+}
+
+.nav-button {
+    width: 100%;
+    background: var(--primary-color);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.nav-button:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.nav-button:active {
+    transform: translateY(0);
+}
+
+/* Banner parent positioning */
+#bannerparent {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 200;
+    width: 100%;
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Adjust container to accommodate fixed banner */
+#container {
+    margin-top: 0; /* No margin since side-widget is on top */
+    padding-top: 20px;
+    width: 100%;
+    position: relative;
+}
+
+/* Ensure content doesn't hide behind fixed banner */
+#content {
+    padding-top: 20px;
+}
+
+/* Test questions area adjustment */
+.test-questions {
+    width: 1000px;
+    padding-left: 30px;
+    min-height: 400px;
+}
+
+/* Side Widget */
+#side-widget {
+    width: 200px;
+    position: fixed;
+    top: 200px;
+    right: 30px;
+    height: 400px;
+    z-index: 300;
+}
+
+/* Submit Button */
+#abandon {
+    background-image: url('../img/timer73.png');
+    background-repeat: no-repeat;
+    background-position: 110% 10%;
+    margin-left: auto; 
+    margin-right: auto;
+    color: #ffffff;
+    background-color: #a4a6e9;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #999999;
+    padding: 2px;
+    font-weight: bold;
+    font-stretch: extra-condensed;
+    vertical-align: middle;
+    text-align: center;
+    font-family: tahoma;
+    padding-top: 7px;
+    padding-bottom: 5px;
+    text-align: center;
+    min-height: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    width: 150px;
+    box-shadow: 1px 1px 3px 0.1px #333333;
+    border-radius: 5px;
+    outline-style: none;
+}
+
+#abandon:hover {
+    color: #333333;
+    background-color: #dff4e0;
+}
+
+/* Timer Section */
+.test-time {
+    background-image: url('../img/timer3.png');
+    background-repeat: no-repeat;
+    background-position: 110% 10%;
+    margin-left: auto; 
+    margin-right: auto;
+    color: #ff0000;
+    background-color: white;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #999999;
+    padding: 2px;
+    font-weight: bold;
+    font-stretch: extra-condensed;
+    vertical-align: middle;
+    text-align: center;
+    font-family: tahoma;
+    padding-top: 2px;
+    text-align: center;
+    height: 70px;
+    width: 150px;
+    box-shadow: 1px 1px 3px 0.1px #333333;
+    outline-style: none;
+}
+
+#test-time {
+    font-size: 38px;
+}
+
+#test-time-title {
+    color: #999999;
+    font-size: 10px;
+    font-weight: normal;
+}
+
+/* Navigation Panel */
+#qnav {
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    color: black;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #999999;
+    padding: 1px;
+    font-stretch: extra-condensed;
+    font-family: tahoma;
+    text-align: center;
+    min-height: 70px;
+    width: 150px;
+    background-color: white;
+    box-shadow: 0px 0px 3px 0.1px #333333;
+    outline-style: none;
+    overflow-y: auto;
+    height: 240px;
+}
+
+#qnavtitle {
+    color: #333333;
+}
+
+/* Question Navigation Buttons */
+.qbut {
+    cursor: pointer;
+    display: inline-table;
+    border-style: solid;
+    border-color: #333333;
+    border-width: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
+    padding-bottom: 3px;
+    margin: 1px;
+    font-size: 11px;
+    border-radius: 2px;
+}
+
+.qbut:hover {
+    background-color: #bef2be;
+}
+
+.qbut a {
+    text-decoration: none;
+    color: #333333;
+}
+
+.qbut.answered {
+    border-color: #76d876;
+    background-color: greenyellow;
+    background-image: url(tickIcon.png);
+}
+
+.qbut.notanswered {
+    border-color: #cccccc;
+}
+
+/* Question content area */
+#sel {
+    padding: 20px;
+}
+
+/* Container div for questions */
+#containerdiv {
+    /* Natural flow without forced height */
+}
+
+/* Smooth scrolling for the entire page */
+html, body {
+    scroll-behavior: smooth;
+}
+
+/* Ensure proper spacing for question content */
+.questionanswerdiv {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+/* Subject info styling */
+#subjectinfodiv {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #e8f4fd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#subjectinfodiv p {
+    margin: 0 0 10px 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.4;
+}
+
+#subjectinfodiv p:last-child {
+    margin-bottom: 0;
+}
+
+#subjectinfodiv b {
+    color: #2c3e50;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9em;
+    display: inline-block;
+    padding: 3px 6px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 4px;
+    margin-right: 6px;
+}
+
+#subjectinfodiv span {
+    color: #34495e;
+    font-weight: 600;
+}
+
+/* Section styling */
+.sectiondiv {
+    margin-bottom: 20px;
+}
+
+#sectioninfodiv {
+    margin-bottom: 15px;
+    padding: 10px;
+    background: #e8f4fd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+/* Banner styling for fixed position */
+#banner {
+    background: white;
+    min-height: 60px;
+    border-radius: 15px;
+    margin: 0 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure banner content is properly contained */
+#banner-img {
+    background-color: #3f6d26;
+    border-style: none;
+    border-width: 0px;
+    min-height: 60px;
+    padding: 0;
+    flex-shrink: 0;
+    border-radius: 15px 0 0 15px;
+}
+
+#navbar {
+    height: auto;
+    box-shadow: none;
+    color: black;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    position: relative;
+    width: 100%;
+}
+
+
+
+/* Ensure navigation buttons are properly contained */
+#previous, #next {
+    display: inline-block;
+    margin: 0 5px;
+    width: auto;
+    min-width: 120px;
+}
+
+/* Mobile responsive - Force desktop layout like test2 */
+@media (max-width: 768px) {
+    /* Force desktop layout on mobile - same as test2 */
+    body {
+        min-width: 1200px; /* Force minimum width */
+        overflow-x: auto; /* Allow horizontal scroll */
+    }
+    
+    #container {
+        min-width: 1200px; /* Force minimum container width */
+    }
+    
+    #banner {
+        min-width: 1200px; /* Force minimum banner width */
+    }
+    
+    .test-questions {
+        min-width: 1000px; /* Force minimum questions width */
+    }
+    
+    #side-widget {
+        position: fixed;
+        top: 200px;
+        right: 30px;
+        width: 200px;
+        height: 400px;
+        z-index: 300;
+    }
+}
+
+/* Additional mobile breakpoints to ensure desktop layout */
+@media (max-width: 480px) {
+    body {
+        min-width: 1200px;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 320px) {
+    body {
+        min-width: 1200px;
+        overflow-x: auto;
+    }
+}
+
+/* Container for navigation buttons */
+.nav-buttons-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 300px;
+    margin: 20px auto;
+}
+
+/* Individual button wrapper */
+.nav-button-wrapper {
+    flex: 0 0 auto;
+}
+
+/* Specific styles for cbtn and tbnnavigation buttons */
+.cbtn.tbnnavigation {
+    display: inline-block;
+    margin: 0 5px;
+    width: auto;
+    min-width: 120px;
+    background: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.cbtn.tbnnavigation:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.cbtn.tbnnavigation:active {
+    transform: translateY(0);
+}
+
+/* Container for the specific button structure you mentioned */
+.nav-buttons-inline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#banner-img img {
+    height: 60px;
+    width: auto;
+    display: inline;
+}
+
+/* Test details styling */
+#test-details {
+    height: auto;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #333;
+    flex-shrink: 0;
+    max-width: 350px;
+    position: relative;
+    z-index: 5;
+    padding: 12px 15px;
+    font-weight: 600;
+}
+
+#test-details b {
+    color: #667eea;
+    font-weight: 800;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 6px;
+}
+
+#test-details span {
+    color: #2c3e50;
+    font-weight: 700;
+    font-size: 13px;
+    margin-left: 3px;
+}
+
+#endorsement {
+    margin-top: 12px;
+    text-align: center;
+    padding: 5px 0;
+    min-height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#endorsement a {
+    color: #667eea;
+    text-decoration: none;
+    font-size: 12px;
+    padding: 8px 20px;
+    border: 1px solid white;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    background: rgba(102, 126, 234, 0.05);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    min-width: 140px;
+    text-align: center;
+}
+
+#endorsement a:hover {
+    background: #667eea;
+    color: white;
+}
+
+/* Subject and remaining questions */
+#tsbj {
+    height: 30px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-shrink: 0;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+}
+
+/* Override the candidate image positioning since it's inside tsbj */
+#tsbj #candid-img {
+    position: absolute;
+    right: -200px; /* Move it to the right edge */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+}
+
+#subjects {
+    padding-left: 5px;
+    height: 30px;
+    vertical-align: bottom;
+    display: inline-block;
+    border-style: solid;
+    border-color: white;
+    border-width: 1px;
+    border-bottom-width: 0px;
+    text-align: center;
+}
+
+.subjbtn {
+    box-sizing: border-box;
+    display: inline-block;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    cursor: pointer;
+    margin-left: -5px;
+    padding-top: 10px;
+    background-color: #cbe7cb;
+    border-style: solid;
+    border-width: 1px;
+    border-color: green;
+    font-weight: bold;
+    color: #333;
+}
+
+.subjbtn:hover {
+    border-color: #667eea;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.active-sbj {
+    color: black;
+    font-weight: bold;
+    background-color: #89d387;
+}
+
+.remaining {
+    box-sizing: border-box;
+    display: inline-block;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-align: center;
+    vertical-align: middle;
+    height: 30px;
+    margin-left: -5px;
+    padding-top: 10px;
+    font-size: 11px;
+    color: #666;
+}
+
+/* Candidate image */
+#candid-img {
+    float: right;
+    clear: both;
+    display: inline-block;
+    padding-right: 5px;
+    position: relative;
+    z-index: 15;
+}
+
+/* Additional positioning for when it's inside tsbj */
+#tsbj #candid-img {
+    position: absolute;
+    right: -200px; /* Move it to the right edge */
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+}
+
+#img-div {
+    margin-top: -120px;
+    background-color: #ffffff;
+    border-style: solid;
+    border-color: green;
+    border-width: 1px;
+    padding: 3px;
+    position: relative;
+    z-index: 15;
+}
+
+#img-div img {
+    width: 110px;
+    height: 130px;
+}

@@ -1,0 +1,10 @@
+# Workspace files
+CBT_SYSTEM.code-workspace
+
+# Error logs
+error_log
+**/error_log
+
+# Database files
+DATABASE/
+
